@@ -6,7 +6,7 @@ export {
 	createAleaFromFunc,
 } from "./internal/factories";
 
-export { charsets } from "./internal/util";
+export { charsets } from "./internal/charsets";
 
 export const alea = new Alea(Math.random);
 

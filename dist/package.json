@@ -1,6 +1,6 @@
 {
   "name": "@xtia/alea-rc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "RNG utilities",
   "repository": {
     "url": "https://github.com/tiadrop/alea",
