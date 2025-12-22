@@ -1,5 +1,3 @@
-import { charsets } from "./util";
-
 type RandomFunction = () => number;
 
 type PhraseFunc = (parse: (template: string) => string) => string;
@@ -102,7 +100,7 @@ export class Alea {
 	 * @param charset 
 	 * @returns Generated string
 	 */
-	string(length: number, charset: string = charsets.alphanumericMixedCase) {
+	string(length: number, charset: string) {
 		if (!Number.isInteger(length) || length < 0) throw new RangeError("length must be a non-negative integer");
   		if (!charset || charset.length === 0) throw new RangeError("charset must not be empty");
   
