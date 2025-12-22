@@ -1,5 +1,5 @@
-import { mulberry32 } from "../prng";
-import { Alea } from "./alea";
+import { mulberry32 } from "../prng/mulberry32.js";
+import { Alea } from "./alea.js";
 
 /**
  * Create an Alea instance using a byte generator, such as `crypto`,

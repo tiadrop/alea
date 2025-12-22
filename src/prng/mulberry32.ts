@@ -1,5 +1,5 @@
-import { Alea } from "../internal/alea";
-import { murmur3_32 } from "../internal/util";
+import { Alea } from "../internal/alea.js";
+import { murmur3_32 } from "../internal/util.js";
 
 /**
  * Create an Alea instance using a Mulberry32 source
