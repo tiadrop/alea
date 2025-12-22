@@ -1,0 +1,23 @@
+{
+  "name": "@xtia/alea",
+  "version": "0.0.1",
+  "description": "RNG utilities",
+  "main": "index.js",
+  "directories": {
+    "lib": "src"
+  },
+  "scripts": {
+    "build": "npx tsc",
+    "test": "jest"
+  },
+  "author": "Aleta Lovelace",
+  "keywords": [
+    "animation",
+    "timeline"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "typescript": "^5.9.3"
+  }
+}

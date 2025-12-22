@@ -1,0 +1,38 @@
+{
+  "name": "@xtia/alea-rc",
+  "version": "0.0.1",
+  "description": "RNG utilities",
+  "repository": {
+    "url": "https://github.com/tiadrop/alea",
+    "type": "github"
+  },
+  "sideEffects": false,
+  "types": "./index.d.ts",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "types": "./other.d.ts",
+      "browser": "./browser.js",
+      "workerd": "./browser.js",
+      "deno": "./browser.js",
+      "node": "./node.js",
+      "bun": "./node.js",
+      "default": "./other.js"
+    },
+    "./prng": {
+      "types": "./prng/index.d.ts",
+      "default": "./prng/index.js"
+    },
+    "./internal/*": null
+  },
+  "scripts": {
+    "prepublishOnly": "cp ../README.md .",
+    "postpublish": "rm README.md"
+  },
+  "keywords": [
+    "random",
+    "rng"
+  ],
+  "author": "Aleta Lovelace",
+  "license": "MIT"
+}

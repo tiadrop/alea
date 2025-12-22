@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "module": "preserve",
+    "target": "es2019",
+    "declaration": true,
+    "strict": true,
+    "outDir": "./dist"
+  },
+  "files": ["src/node.ts", "src/browser.ts", "src/other.ts", "./src/prng/index.ts"]
+}
