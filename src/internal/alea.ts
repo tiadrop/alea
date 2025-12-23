@@ -122,7 +122,7 @@ export class Alea {
 	}
 
 	/**
-	 * Generates a phrase from a table and a root string
+	 * Generate a phrase from a table and a root string
 	 * @example
 	 * ```ts
 	 * const message = alea.phrase({
