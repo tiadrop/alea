@@ -1,4 +1,4 @@
-import { Alea } from "./internal/alea.js";
+import { Alea } from "../internal/alea.js";
 
 export * from "./common.js";
 

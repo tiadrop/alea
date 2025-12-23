@@ -1,4 +1,4 @@
-import { createAleaFromByteSource } from "./internal/factories.js"
+import { createAleaFromByteSource } from "../internal/factories.js"
 import { randomBytes } from 'node:crypto';
 
 export * from "./common.js";

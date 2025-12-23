@@ -1,4 +1,4 @@
-import { createAleaFromByteSource } from "./internal/factories.js";
+import { createAleaFromByteSource } from "../internal/factories.js";
 
 export * from "./common.js";
 

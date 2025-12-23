@@ -7,5 +7,5 @@
     "strict": true,
     "outDir": "./dist"
   },
-  "files": ["src/node.ts", "src/browser.ts", "src/other.ts", "./src/prng/index.ts"]
+  "files": ["src/entry/node.ts", "src/entry/browser.ts", "src/entry/other.ts", "./src/prng/index.ts"]
 }
