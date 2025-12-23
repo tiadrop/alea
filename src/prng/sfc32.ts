@@ -1,5 +1,5 @@
 import { Alea } from "../internal/alea.js";
-import { murmur3_32 } from "../internal/util.js";
+import { hashSeed } from "../internal/util.js";
 
 /**
  * Create an Alea instance using a Small Fast Counter (SFC32) source
@@ -13,7 +13,7 @@ import { murmur3_32 } from "../internal/util.js";
  */
 export function sfc32(a: number | string, b: number | string, c: number | string, d: number | string) {
     const toWord = (v: number | string) =>
-        typeof v === "number" ? (v >>> 0) : murmur3_32(String(v));
+        typeof v === "number" ? (v >>> 0) : hashSeed(String(v));
 
     let s0 = toWord(a) | 0;
     let s1 = toWord(b) | 0;

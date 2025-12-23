@@ -1,5 +1,5 @@
 import { Alea } from "../internal/alea.js";
-import { murmur3_32 } from "../internal/util.js";
+import { hashSeed } from "../internal/util.js";
 
 function rotl(x: number, k: number): number {
 	return (x << k) | (x >>> (32 - k));
@@ -22,12 +22,12 @@ export function xoshiro128pp(
 	d: number | string
 ) {
 	const toWord = (v: number | string) =>
-		typeof v === "number" ? v >>> 0 : murmur3_32(String(v));
+		(typeof v === "number" ? v >>> 0 : hashSeed(String(v))) | 0;
 
-	let s0 = toWord(a) | 0;
-	let s1 = toWord(b) | 0;
-	let s2 = toWord(c) | 0;
-	let s3 = toWord(d) | 0;
+	let s0 = toWord(a);
+	let s1 = toWord(b);
+	let s2 = toWord(c);
+	let s3 = toWord(d);
 
 	// requires at least one non-zero value
 	if (s0 === 0 && s1 === 0 && s2 === 0 && s3 === 0) {

@@ -1,5 +1,5 @@
 import { Alea } from "../internal/alea.js";
-import { murmur3_32 } from "../internal/util.js";
+import { hashSeed } from "../internal/util.js";
 
 /**
  * Create an Alea instance using a Mulberry32 source
@@ -9,7 +9,7 @@ import { murmur3_32 } from "../internal/util.js";
  * @returns Alea instance using Mulberry32
  */
 export const mulberry32 = (seed: number | string) => {
-	let nseed = typeof seed == "string" ? murmur3_32(seed) : (seed >>> 0);
+	let nseed = typeof seed == "string" ? hashSeed(seed) : (seed >>> 0);
 	return new Alea(() => {
 		nseed |= 0;
 		nseed = nseed + 0x6D2B79F5 | 0;
