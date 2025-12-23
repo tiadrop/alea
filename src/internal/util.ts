@@ -1,5 +1,3 @@
-const encoder = new TextEncoder();
-
 export function hashSeed(seed: string): number {
     let hash = 0;
     

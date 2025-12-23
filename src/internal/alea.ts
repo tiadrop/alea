@@ -111,13 +111,10 @@ export class Alea {
 	string(length: number, charset: string) {
 		if (!Number.isInteger(length) || length < 0)
 			throw new RangeError("length must be a non-negative integer");
-		if (!charset || charset.length === 0)
-			throw new RangeError("charset must not be empty");
+		const pool = [...charset];
+		if (pool.length === 0) throw new RangeError("charset must not be empty");
 
-		const chars = Array.from(
-			{ length },
-			() => charset[Math.floor(this.next() * charset.length)]
-		);
+		const chars = Array.from({ length }, () => this.sample(pool));
 		return chars.join("");
 	}
 
