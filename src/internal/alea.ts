@@ -16,18 +16,6 @@ export class Alea {
 	}
 
 	/**
-	 * Generate a series of normalised random values
-	 * @param count
-	 * @returns Random values
-	 */
-	batch(count: number) {
-		if (!Number.isInteger(count) || count < 0) {
-			throw new RangeError("count must be a non-negative integer");
-		}
-		return Array.from({ length: count }, () => this.next());
-	}
-
-	/**
 	 * Pick a random item from an array
 	 * @param items
 	 * @returns Random item from an array
@@ -217,11 +205,11 @@ export class Alea {
 			byteArray.byteLength
 		);
 		for (let i = 0; i < words; i++) {
-			view.setUint32(i * 4, this.int(0, 0xffffffff));
+			view.setUint32(i * 4, this.between(0, 0x100000000) >>> 0);
 		}
 
 		for (let i = words * 4; i < len; i++) {
-			byteArray[i] = this.int(0, 255);
+			byteArray[i] = this.between(0, 256) | 0;
 		}
 
 		return result;
@@ -263,30 +251,6 @@ export class Alea {
 			mean + z0 * deviation,
 			mean + z1 * deviation
 		];
-	}
-
-	/**
-	 * Get a random integer value between `min` and `max`, inclusive.
-	 * @param min Minimum value, **inclusive**
-	 * @param max Maximum value, **inclusive**
-	 * @returns Random int value
-	 */
-	int(min: number, max: number): number {
-		return Math.floor(this.between(min, max + 1));
-	}
-
-	/**
-	 * Roll dice
-	 * @param count Number of dice to roll (default 1)
-	 * @param sides Number of sides per die (default 6)
-	 * @returns Dice result
-	 */
-	roll(count: number = 1, sides: number = 6) {
-		let total = 0;
-		for (let i = 0; i < count; i++) {
-			total += this.int(1, sides);
-		}
-		return total;
 	}
 
 	/**

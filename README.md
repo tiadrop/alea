@@ -7,7 +7,7 @@ Alea is a utility wrapper for turning random numbers into useful values. Give it
 * Fully typed
 * Crypto-safe and seeded algorithms out-of-the-box
 * No dependencies
-* ~2.6kb minified core
+* ~2.4kb minified core
 * Ranged int, array shuffling, dice roll, weighted sampling, recursive template phrase generation, UUID, bytes and many more
 
 ## Brief:
