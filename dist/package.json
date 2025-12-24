@@ -1,7 +1,7 @@
 {
-  "name": "@xtia/alea-rc",
-  "version": "0.0.11",
-  "description": "RNG utilities",
+  "name": "@xtia/alea",
+  "version": "1.0.0",
+  "description": "A practical randomness toolkit. Sample/shuffle arrays, generate strings, create UUIDs, and more, with a unified API for Math.random(), crypto, or custom/transformed PRNGs.",
   "repository": {
     "url": "https://github.com/tiadrop/alea",
     "type": "github"
@@ -20,8 +20,8 @@
       "default": "./entry/other.js"
     },
     "./prng": {
-      "types": "./prng/index.d.ts",
-      "default": "./prng/index.js"
+      "types": "./entry/prng/index.d.ts",
+      "default": "./entry/prng/index.js"
     },
     "./internal/*": null,
     "./entry/*": null
@@ -32,7 +32,9 @@
   },
   "keywords": [
     "random",
-    "rng"
+    "rng",
+    "crypto",
+    "prng"
   ],
   "author": "Aleta Lovelace",
   "license": "MIT"

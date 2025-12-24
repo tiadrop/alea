@@ -4,30 +4,59 @@
 
 Alea is a utility wrapper for turning random numbers into useful values. Give it any source of randomness, get a toolkit for dice, samples, strings, and more.
 
-* Fully typed
-* Crypto-safe and seeded algorithms out-of-the-box
 * Expressive: code with intent
+* Crypto-safe and seeded algorithms out-of-the-box
+* Array shuffling, weighted sampling, recursive template phrase generation, UUID, bytes and more
+* Fully typed
 * No dependencies
 * ~2.4kb minified core
-* Array shuffling, weighted sampling, recursive template phrase generation, UUID, bytes and many more
 
-`npm i @xtia/alea` (pending release; use `@xtia/alea-rc` to preview)
+## Basics
+
+Install: `npm i @xtia/alea`
 
 ```ts
-import { alea, cryptoAlea } from "@xtia/alea";
+import { alea } from "@xtia/alea";
 
-// generate values (driven by Math.random())
-const damage = alea.between(50, 150);
-const loot = alea.chance(0.125) ? "epic" : "common";
-const id = alea.string(5, "abcdef0123456789");
-const npcName = alea.sample(["Alice", "Bob", "Charlie"]);
+// default alea draws from Math.random()
 
-// same API, secure source (driven by environment's crypto)
-const id = cryptoAlea.string(16, alphanumeric);
+// game development
+const damage = alea.between(10, 20);
+const crit = alea.chance(0.1);
+const loot = alea.sample(['sword', 'potion', 'gold']);
+const enemySpawner = alea.createWeightedSampler([
+    ["goblin", 10],
+    ["orc", 5],
+    ["dragon", 0.1] // rare but possible!
+]);
+const enemy = enemySpawner();
+
+// data generation
+const userId = alea.string(8, 'abcdef0123456789');
+const fakeName = alea.phrase(nameTables, '{firstName} {lastName}');
+
+// statistics
+const [z1, z2] = alea.normal(0, 1);
 ```
-# Custom sources
 
-Use any provider as RNG source:
+For convenience, common character sets for string can be imported: `import { charsets } from "@xtia/alea"`.
+
+## Crypto-secure
+
+Use the same API layer, whatever the source of randomness:
+
+```ts
+import { cryptoAlea } from "@xtia/alea";
+
+// cryptoAlea draws from runtime's crypto
+
+const id = cryptoAlea.uuid();
+const unpredictableDeck = cryptoAlea.shuffle(cards);
+```
+
+## Custom sources
+
+Use any randomness provider:
 
 ```ts
 import {
@@ -63,4 +92,22 @@ const varied = sfc32(1, 2, 3, 4);
 const strong = xoshiro128pp(5, 6, 7, 8);
 
 const reproducibleId = varied.string(12, hexadecimal);
+```
+
+## Advanced: Custom Distributions
+
+Transform a random stream for different distributions:
+
+```ts
+// exponential distribution
+const expSampler = alea.transform(x => -Math.log(1 - x));
+const waitTime = expSampler.between(0, 10);
+
+// quadratic ease
+const leftSkewed = alea.transform(x => x * x)
+    .sample(items);
+
+// square root ease
+const rightSkewed = alea.transform(x => Math.sqrt(x))
+    .sample(items);
 ```

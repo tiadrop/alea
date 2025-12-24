@@ -7,4 +7,8 @@ export {
 } from "../internal/factories.js";
 
 export { charsets } from "../internal/charsets.js";
-export { alea } from "../internal/mathalea.js";
+
+/**
+ * An Alea instance that uses Math.random() as a source
+ */
+export const alea = new Alea(Math.random);

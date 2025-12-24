@@ -1,3 +1,5 @@
+import type { cryptoAlea } from "../entry/other.js";
+
 type RandomFunction = () => number;
 
 type PhraseFunc = (parse: (template: string) => string) => string;
@@ -170,49 +172,47 @@ export class Alea {
 
 	/**
 	 * Generate a sequence of bytes
+	 * 
+	 * *Technical note*: queries RNG source once per 4 bytes
+	 * RNG distribution applies at the 32-bit level
 	 * @param size Number of bytes to generate
 	 * @returns Random byte array
 	 */
 	bytes(size: number): Uint8Array;
 	/**
 	 * Fill a byte buffer with random bytes
+	 * 
+	 * *Technical note*: queries RNG source once per 4 bytes
+	 * RNG distribution applies at the 32-bit level
 	 * @param buffer Any TypedArray or DataView
 	 * @returns The same buffer, filled
 	 */
 	bytes<T extends ArrayBufferView>(buffer: T): T;
 	bytes(sizeOrBuffer: number | ArrayBufferView): ArrayBufferView {
-		let byteArray: Uint8Array;
-		let result: ArrayBufferView;
-
-		if (typeof sizeOrBuffer === "number") {
-			byteArray = new Uint8Array(sizeOrBuffer);
-			result = byteArray;
-		} else {
-			byteArray = new Uint8Array(
-				sizeOrBuffer.buffer,
-				sizeOrBuffer.byteOffset,
-				sizeOrBuffer.byteLength
-			);
-			result = sizeOrBuffer;
-		}
-
+		const byteArray = typeof sizeOrBuffer === "number"
+			? new Uint8Array(sizeOrBuffer)
+			: new Uint8Array(sizeOrBuffer.buffer, sizeOrBuffer.byteOffset, sizeOrBuffer.byteLength);
+		
 		const len = byteArray.length;
-		const words = Math.floor(len / 4);
-
-		const view = new DataView(
-			byteArray.buffer,
-			byteArray.byteOffset,
-			byteArray.byteLength
-		);
+		const words = len >>> 2;
+		const remainder = len & 3;
+		
+		const view = new DataView(byteArray.buffer, byteArray.byteOffset, byteArray.byteLength);
 		for (let i = 0; i < words; i++) {
 			view.setUint32(i * 4, this.between(0, 0x100000000) >>> 0);
 		}
-
-		for (let i = words * 4; i < len; i++) {
-			byteArray[i] = this.between(0, 256) | 0;
+		
+		if (remainder) {
+			const word = this.between(0, 0x100000000) >>> 0;
+			const offset = words * 4;
+			switch (remainder) {
+				case 3: byteArray[offset + 2] = (word >>> 8) & 0xFF;
+				case 2: byteArray[offset + 1] = (word >>> 16) & 0xFF;
+				case 1: byteArray[offset] = (word >>> 24) & 0xFF;
+			}
 		}
-
-		return result;
+		
+		return typeof sizeOrBuffer === "number" ? byteArray : sizeOrBuffer;
 	}
 
 	/**
@@ -258,7 +258,7 @@ export class Alea {
 	 *
 	 * **Security note**: output is only as cryptographically secure as
 	 * an instance's PRNG source, which, by default, is not.
-	 * @see {@link Alea.crypto}
+	 * @see {@link cryptoAlea}
 	 * @returns Random UUID string
 	 */
 	uuid(): string {
@@ -283,7 +283,7 @@ export class Alea {
 
 	/**
 	 * Create an Alea instance using the parent as a source,
-	 * transforming values to modify distribution
+	 * transforming random values to modify distribution
 	 * @param fn A function that takes and returns values >= 0 and < 1
 	 * @returns Alea instance with modified distribution
 	 */

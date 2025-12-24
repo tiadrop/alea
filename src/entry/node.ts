@@ -1,8 +1,6 @@
 import { aleaFromByteSource } from "../internal/factories.js"
-import { randomBytes } from 'node:crypto';
+import { randomFillSync } from 'node:crypto';
 
 export * from "./common.js";
 
-export const cryptoAlea = aleaFromByteSource(arr => {
-	randomBytes(arr.length).copy(arr);
-});
+export const cryptoAlea = aleaFromByteSource(randomFillSync);

@@ -1,4 +1,4 @@
-import { mulberry32 } from "../prng/mulberry32.js";
+import { mulberry32 } from "./prng/mulberry32.js";
 import { Alea } from "./alea.js";
 
 /**
@@ -30,7 +30,7 @@ export function aleaFromByteSource(
  * 
  * Fast, with decent statistical quality
  * 
- * For applications requiring higher statistical quality or different characteristics, see the specialized PRNGs in @xtia/Alea/prng
+ * For applications requiring higher statistical quality or different characteristics, see the specialised PRNGs in @xtia/Alea/prng
  * @param seed 
  * @returns Alea instance using Mulberry32
  */

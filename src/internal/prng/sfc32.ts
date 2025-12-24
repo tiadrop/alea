@@ -1,5 +1,5 @@
-import { Alea } from "../internal/alea.js";
-import { hashSeed } from "../internal/util.js";
+import { Alea } from "../alea.js";
+import { hashSeed } from "../util.js";
 
 /**
  * Create an Alea instance using a Small Fast Counter (SFC32) source
