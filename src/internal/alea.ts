@@ -111,7 +111,7 @@ export class Alea {
 	 * ```ts
 	 * const message = alea.phrase({
 	 *   greeting: ["hello", "hi", "{int} blessings"],
-	 *   addressee: ["world", "planet", "{adjective} @xtia user"],
+	 *   addressee: ["world", "planet", "{adjective} Alea user"],
 	 *   adjective: ["beautiful", "wonderful"],
 	 *   int: () => Math.floor(alea.between(3, 9)).toString(),
 	 * }, "{greeting}, {addressee}!")
@@ -279,5 +279,15 @@ export class Alea {
 			hex.slice(16, 20),
 			hex.slice(20, 32),
 		].join("-");
+	}
+
+	/**
+	 * Create an Alea instance using the parent as a source,
+	 * transforming values to modify distribution
+	 * @param fn A function that takes and returns values >= 0 and < 1
+	 * @returns Alea instance with modified distribution
+	 */
+	transform(fn: (n: number) => number) {
+		return new Alea(() => fn(this.next()));
 	}
 }
