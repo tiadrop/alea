@@ -114,8 +114,7 @@ export class Alea {
 		const pool = [...charset];
 		if (pool.length === 0) throw new RangeError("charset must not be empty");
 
-		const chars = Array.from({ length }, () => this.sample(pool));
-		return chars.join("");
+		return Array.from({ length }, () => this.sample(pool)).join("");
 	}
 
 	/**
@@ -245,21 +244,25 @@ export class Alea {
 	}
 
 	/**
-	 * Get a random gaussian normal value
+	 * Get a random normal pair using Box-Muller transform
 	 * @param mean
 	 * @param deviation
-	 * @returns Random gaussian normal
+	 * @returns Gaussian normal pair
 	 */
-	normal(mean: number, deviation: number): number {
+	normal(mean = 0, deviation = 1): [number, number] {
 		let u1 = this.next();
-		while (u1 <= Number.EPSILON) {
-			u1 = this.next();
-		}
+		while (u1 <= Number.EPSILON) u1 = this.next();
 		const u2 = this.next();
 		const mag = Math.sqrt(-2 * Math.log(u1));
 		const angle = 2 * Math.PI * u2;
-
-		return mean + mag * Math.cos(angle) * deviation;
+		
+		const z0 = mag * Math.cos(angle);
+		const z1 = mag * Math.sin(angle);
+		
+		return [
+			mean + z0 * deviation,
+			mean + z1 * deviation
+		];
 	}
 
 	/**
