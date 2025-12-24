@@ -12,7 +12,7 @@ import { Alea } from "./alea.js";
  * @param applyBytes A callback that fills a Uint8Array with random bytes
  * @returns A byte generator-sourced Alea instance
  */
-export function createAleaFromByteSource(
+export function aleaFromByteSource(
 	applyBytes: (buffer: Uint8Array) => void
 ) {
 	const buffer = new ArrayBuffer(4);
@@ -34,7 +34,7 @@ export function createAleaFromByteSource(
  * @param seed 
  * @returns Alea instance using Mulberry32
  */
-export function createAleaFromSeed(seed: number | string) {
+export function aleaFromSeed(seed: number | string) {
 	return mulberry32(seed);
 }
 
@@ -48,7 +48,7 @@ export function createAleaFromSeed(seed: number | string) {
  * @param fn Source RNG; a function that returns a value >= 0 and < 1
  * @returns Custom function-sourced Alea instance
  */
-export function createAleaFromFunc(fn: () => number) {
+export function aleaFromFunc(fn: () => number) {
 	return new Alea(fn);
 }
 

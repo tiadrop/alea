@@ -7,8 +7,8 @@ Alea is a utility wrapper for turning random numbers into useful values. Give it
 * Fully typed
 * Crypto-safe and seeded algorithms out-of-the-box
 * No dependencies
-* ~2.3kb minified core (1.04kb gzipped)
-* Ranged int, array shuffling, dice roll, weighted sampling, phrase generation, UUID, bytes and many more
+* ~2.6kb minified core
+* Ranged int, array shuffling, dice roll, weighted sampling, recursive template phrase generation, UUID, bytes and many more
 
 ## Brief:
 
@@ -21,31 +21,38 @@ import { alea, cryptoAlea } from "@xtia/alea";
 const damage = alea.roll(2, 6); // 2d6
 const duration = alea.between(1000, 1500);
 const loot = alea.chance(0.125) ? "epic" : "common";
-const id = alea.string(5);
+const id = alea.string(5, "abcdef0123456789");
 const npcName = alea.sample(["Alice", "Bob", "Charlie"]);
 
 // secure source (driven by environment's crypto)
 const key = cryptoAlea.string(16);
 ```
-
-## Custom sources
+# Custom sources
 
 Use any provider as RNG source:
 
 ```ts
 import {
-    createAleaFromFunc,
-    createAleaFromSeed,
-    createAleaFromByteSource,
+    aleaFromFunc,
+    aleaFromSeed,
+    aleaFromByteSource,
 } from "@xtia/alea";
 
-const deterministic = createAleaFromSeed("abc123");
-const xkcdRng = createAleaFromFunc(() => 4/6); // https://xkcd.com/221/
-const secure = createAleaFromByteSource(
+// deterministic, with seed (uses Mulberry32 PRNG):
+const seededRng = aleaFromSeed("abc123");
+
+// custom source of randomness:
+const xkcdRng = aleaFromFunc(() => 4/6); // https://xkcd.com/221/
+
+// from random byte providers:
+const secureRng = aleaFromByteSource(
     buf => hardwareRNG.fillRandomBytes(buf)
 );
+```
 
-// or use provided PRNG algorithms:
+Or use a provided PRNG algorithm:
+
+```ts
 import {
     mulberry32,
     sfc32,
@@ -57,5 +64,5 @@ const fast = mulberry32("my-seed");
 const varied = sfc32(1, 2, 3, 4);
 const strong = xoshiro128pp(5, 6, 7, 8);
 
-const reproducibleId = varied.string(5);
+const reproducibleRoll = varied.roll(3, 6);
 ```
