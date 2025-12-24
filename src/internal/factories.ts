@@ -6,8 +6,8 @@ import { Alea } from "./alea.js";
  * as a RNG source
  * @example
  * ```ts
- * const cryptoAlea = createAleaFromByteSource(crypto.getRandomValues);
- * const hwAlea = createAleaFromByteSource(hardwareRng.fillBytes);
+ * const cryptoAlea = aleaFromByteSource(crypto.getRandomValues);
+ * const hwAlea = aleaFromByteSource(hardwareRng.fillBytes);
  * ```
  * @param applyBytes A callback that fills a Uint8Array with random bytes
  * @returns A byte generator-sourced Alea instance
@@ -42,8 +42,8 @@ export function aleaFromSeed(seed: number | string) {
  * Create an Alea instance using a custom function as an RNG source
  * @example
  * ```ts
- * const basicAlea = createAleaFromFunc(Math.random);
- * const lcgAlea = createAleaFromFunc(customRng.next);
+ * const basicAlea = aleaFromFunc(Math.random);
+ * const lcgAlea = aleaFromFunc(customRng.next);
  * ```
  * @param fn Source RNG; a function that returns a value >= 0 and < 1
  * @returns Custom function-sourced Alea instance
@@ -52,4 +52,4 @@ export function aleaFromFunc(fn: () => number) {
 	return new Alea(fn);
 }
 
-// const xkcdAlea = createAleaFromFunc(() => 4/6); // decided by die roll
+// const xkcdAlea = aleaFromFunc(() => 4/6); // decided by die roll

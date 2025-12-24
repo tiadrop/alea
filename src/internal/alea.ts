@@ -113,7 +113,7 @@ export class Alea {
 	 *   greeting: ["hello", "hi", "{int} blessings"],
 	 *   addressee: ["world", "planet", "{adjective} @xtia user"],
 	 *   adjective: ["beautiful", "wonderful"],
-	 *   int: () => alea.int(0, 9).toString(),
+	 *   int: () => Math.floor(alea.between(3, 9)).toString(),
 	 * }, "{greeting}, {addressee}!")
 	 * ```
 	 * @param table
