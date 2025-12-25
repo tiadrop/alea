@@ -96,7 +96,7 @@ const reproducibleId = varied.string(12, hexadecimal);
 
 ## Advanced: Custom Distributions
 
-Transform a random stream for different distributions:
+Transform randomness to different probability curves:
 
 ```ts
 // exponential distribution
