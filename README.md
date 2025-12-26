@@ -94,9 +94,9 @@ const strong = xoshiro128pp(5, 6, 7, 8);
 const reproducibleId = varied.string(12, hexadecimal);
 ```
 
-## Advanced: Custom Distributions
+## Advanced: Probability Density Transforms
 
-Transform randomness to different probability curves:
+Transform randomness for different probability curves:
 
 ```ts
 // exponential distribution

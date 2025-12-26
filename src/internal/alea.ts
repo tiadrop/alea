@@ -173,8 +173,8 @@ export class Alea {
 	/**
 	 * Generate a sequence of bytes
 	 * 
-	 * *Technical note*: queries RNG source once per 4 bytes
-	 * RNG distribution applies at the 32-bit level
+	 * *Technical note*: queries RNG source once per 4 bytes;
+	 * probability distribution applies at the 32-bit level
 	 * @param size Number of bytes to generate
 	 * @returns Random byte array
 	 */
@@ -182,8 +182,9 @@ export class Alea {
 	/**
 	 * Fill a byte buffer with random bytes
 	 * 
-	 * *Technical note*: queries RNG source once per 4 bytes
-	 * RNG distribution applies at the 32-bit level
+	 * *Technical note*: queries RNG source once per 4 bytes;
+	 * probability distribution applies at the 32-bit level
+	 * 
 	 * @param buffer Any TypedArray or DataView
 	 * @returns The same buffer, filled
 	 */
@@ -282,10 +283,9 @@ export class Alea {
 	}
 
 	/**
-	 * Create an Alea instance using the parent as a source,
-	 * transforming random values to modify distribution
+	 * Create an Alea instance using with a transformed probability density
 	 * @param fn A function that takes and returns values >= 0 and < 1
-	 * @returns Alea instance with modified distribution
+	 * @returns Alea instance following the transformed distribution
 	 */
 	transform(fn: (n: number) => number) {
 		return new Alea(() => fn(this.next()));

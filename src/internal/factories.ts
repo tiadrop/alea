@@ -30,7 +30,7 @@ export function aleaFromByteSource(
  * 
  * Fast, with decent statistical quality
  * 
- * For applications requiring higher statistical quality or different characteristics, see the specialised PRNGs in @xtia/Alea/prng
+ * For applications requiring higher statistical quality or different characteristics, see the specialised PRNGs in @xtia/alea/prng
  * @param seed 
  * @returns Alea instance using Mulberry32
  */
@@ -51,5 +51,3 @@ export function aleaFromSeed(seed: number | string) {
 export function aleaFromFunc(fn: () => number) {
 	return new Alea(fn);
 }
-
-// const xkcdAlea = aleaFromFunc(() => 4/6); // decided by die roll
