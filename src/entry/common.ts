@@ -4,6 +4,7 @@ export {
 	aleaFromByteSource,
 	aleaFromSeed,
 	aleaFromFunc,
+	aleaFromSequence,
 } from "../internal/factories.js";
 
 export { charsets } from "../internal/charsets.js";

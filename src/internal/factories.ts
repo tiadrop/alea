@@ -51,3 +51,35 @@ export function aleaFromSeed(seed: number | string) {
 export function aleaFromFunc(fn: () => number) {
 	return new Alea(fn);
 }
+
+type ExhaustionHandler = 'throw' | 'loop' | number | ((index: number) => number) | {
+	next: () => number;
+};
+
+export function aleaFromSequence(sequence: number[], onExhaust: ExhaustionHandler = "throw"): Alea {
+    let index = 0;
+    const len = sequence.length;
+
+	return new Alea(() => {
+        if (index >= len) {
+			if (
+				typeof onExhaust === "object"
+			) {
+				return onExhaust.next();
+			}
+            switch (onExhaust) {
+                case 'throw':
+                    throw new RangeError(`Sequence exhausted at index ${index}`);
+                case 'loop':
+                    index = 0;
+                    break;
+                default: {
+					return typeof onExhaust == "number"
+						? onExhaust
+						: onExhaust(index);
+				}
+            }
+        }
+        return sequence[index++];
+    });
+}
