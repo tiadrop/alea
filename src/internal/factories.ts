@@ -56,7 +56,13 @@ type ExhaustionHandler = 'throw' | 'loop' | number | ((index: number) => number)
 	next: () => number;
 };
 
-export function aleaFromSequence(sequence: number[], onExhaust: ExhaustionHandler = "throw"): Alea {
+/**
+ * Create an Alea instance that draws sequentially from a fixed list of values
+ * @param sequence List of values >= 0 and < 1
+ * @param onExhaust Define behaviour when the sequence is exhausted
+ * @returns Sequence-sourced Alea instance
+ */
+export function aleaFromSequence(sequence: ArrayLike<number>, onExhaust: ExhaustionHandler = "throw"): Alea {
     let index = 0;
     const len = sequence.length;
 
