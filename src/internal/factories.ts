@@ -15,14 +15,14 @@ import { Alea } from "./alea.js";
 export function aleaFromByteSource(
 	applyBytes: (buffer: Uint8Array) => void
 ) {
-	const buffer = new ArrayBuffer(4);
-	const view = new Uint8Array(buffer);
-	const uint32View = new Uint32Array(buffer);
-	
 	return new Alea(() => {
-		applyBytes(view);
-		return uint32View[0] / 4294967296;
-	});
+        const buffer = new ArrayBuffer(4);
+        const view = new Uint8Array(buffer);
+        const uint32View = new Uint32Array(buffer);
+        
+        applyBytes(view);
+        return uint32View[0] / 4294967296;
+    });
 }
 
 /**
