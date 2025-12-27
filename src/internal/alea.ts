@@ -175,6 +175,7 @@ export class Alea {
 	 * 
 	 * *Technical note*: queries RNG source once per 4 bytes;
 	 * probability distribution applies at the 32-bit level
+	 * 
 	 * @param size Number of bytes to generate
 	 * @returns Random byte array
 	 */

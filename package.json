@@ -1,6 +1,6 @@
 {
   "name": "@xtia/alea",
-  "version": "0.0.1",
+  "version": "1.1.0",
   "description": "RNG utilities",
   "main": "index.js",
   "directories": {

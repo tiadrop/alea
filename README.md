@@ -63,6 +63,7 @@ import {
     aleaFromFunc,
     aleaFromSeed,
     aleaFromByteSource,
+    aleaFromSequence
 } from "@xtia/alea";
 
 // deterministic, with seed (uses Mulberry32 PRNG):
@@ -73,8 +74,11 @@ const xkcdRng = aleaFromFunc(() => 4/6); // https://xkcd.com/221/
 
 // from random byte providers:
 const secureRng = aleaFromByteSource(
-    buf => hardwareRNG.fillRandomBytes(buf)
+    buf => hardwareRng.fillRandomBytes(buf)
 );
+
+// preset sequence for debugging
+const presetRng = aleaFromSequence([.1, .4, .8], "loop");
 ```
 
 Or use a provided PRNG algorithm:
