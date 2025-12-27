@@ -29,7 +29,7 @@ const enemySpawner = alea.createWeightedSampler([
     ["orc", 5],
     ["dragon", 0.1] // rare but possible!
 ]);
-const enemy = enemySpawner();
+const enemy = enemySpawner.sample();
 
 // data generation
 const userId = alea.string(8, 'abcdef0123456789');
