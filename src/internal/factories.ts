@@ -2,8 +2,7 @@ import { mulberry32 } from "./prng/mulberry32.js";
 import { Alea } from "./alea.js";
 
 /**
- * Create an Alea instance that draws from a byte generator, such as `crypto`,
- * as a RNG source
+ * Create an Alea instance that draws from a byte generator, such as `crypto`
  * @example
  * ```ts
  * const cryptoAlea = aleaFromByteSource(crypto.getRandomValues);
@@ -37,7 +36,7 @@ export function aleaFromSeed(seed: number | string) {
 }
 
 /**
- * Create an Alea instance using a custom function as an RNG source
+ * Create an Alea instance that draws from a custom function
  * @example
  * ```ts
  * const basicAlea = aleaFromFunc(Math.random);
@@ -57,7 +56,7 @@ type ExhaustionHandler = 'throw' | 'loop' | number | ((index: number) => number)
 /**
  * Create an Alea instance that draws sequentially from a fixed list of values
  * @param sequence List of values >= 0 and < 1
- * @param onExhaust Define behaviour when the sequence is exhausted
+ * @param onExhaust Defines behaviour when the sequence is exhausted
  * @returns Sequence-sourced Alea instance
  */
 export function aleaFromSequence(sequence: ArrayLike<number>, onExhaust: ExhaustionHandler = "throw"): Alea {
