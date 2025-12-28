@@ -17,11 +17,9 @@ export function aleaFromByteSource(
 ) {
 	return new Alea(() => {
         const buffer = new ArrayBuffer(4);
-        const view = new Uint8Array(buffer);
-        const uint32View = new Uint32Array(buffer);
-        
-        applyBytes(view);
-        return uint32View[0] / 4294967296;
+		const view = new DataView(buffer);
+		applyBytes(new Uint8Array(buffer));
+		return view.getUint32(0) / 4294967296;
     });
 }
 
