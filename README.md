@@ -115,3 +115,8 @@ const leftSkewed = alea.transform(x => x * x)
 const rightSkewed = alea.transform(x => Math.sqrt(x))
     .sample(items);
 ```
+
+## Technicalities
+
+* String seeds are hashed with [DJB2-based accumulation with MurmurHash3](src/internal/util.ts) bit diffusion.
+* `bytes()` queries the RNG provider one per 4 bytes; transform curves are applied at the 32-bit level.
