@@ -2,9 +2,9 @@ import { Alea } from "../alea.js";
 import { hashSeed } from "../util.js";
 
 /**
- * Create an Alea instance using a Mulberry32 source
+ * Create an Alea instance that draws from a Mulberry32 PRNG
  * 
- * Fast, with decent statistical quality
+ * - Fast, with decent statistical quality
  * @param seed 
  * @returns Alea instance using Mulberry32
  */

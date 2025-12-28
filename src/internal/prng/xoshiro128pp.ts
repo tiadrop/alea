@@ -6,9 +6,9 @@ function rotl(x: number, k: number): number {
 }
 
 /**
- * Create an Alea instance using a Xoshiro128++ source
+ * Create an Alea instance that draws from a Xoshiro128++ PRNG
  *
- * Very high statistical quality
+ * - Very high statistical quality
  * @param a Seed A
  * @param b Seed B
  * @param c Seed C

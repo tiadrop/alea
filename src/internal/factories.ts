@@ -2,7 +2,7 @@ import { mulberry32 } from "./prng/mulberry32.js";
 import { Alea } from "./alea.js";
 
 /**
- * Create an Alea instance using a byte generator, such as `crypto`,
+ * Create an Alea instance that draws from a byte generator, such as `crypto`,
  * as a RNG source
  * @example
  * ```ts
@@ -24,9 +24,9 @@ export function aleaFromByteSource(
 }
 
 /**
- * Create an Alea instance using a Mulberry32 source
+ * Create an Alea instance that draws from a seeded Mulberry32 PRNG
  * 
- * Fast, with decent statistical quality
+ * - Fast, with decent statistical quality
  * 
  * For applications requiring higher statistical quality or different characteristics, see the specialised PRNGs in @xtia/alea/prng
  * @param seed 

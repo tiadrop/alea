@@ -2,14 +2,14 @@ import { Alea } from "../alea.js";
 import { hashSeed } from "../util.js";
 
 /**
- * Create an Alea instance using a Small Fast Counter (SFC32) source
+ * Create an Alea instance that draws from a Small Fast Counter (SFC32) PRNG
  * 
- * Fairly fast, with high statistical quality
+ * - Fairly fast, with high statistical quality
  * @param a Seed A
  * @param b Seed B
  * @param c Seed C
  * @param d Seed D
- * @returns Alea isntance using SFC32
+ * @returns Alea instance using SFC32
  */
 export function sfc32(a: number | string, b: number | string, c: number | string, d: number | string) {
     const toWord = (v: number | string) =>
