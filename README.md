@@ -72,12 +72,17 @@ const seededRng = aleaFromSeed("abc123");
 // custom source of randomness:
 const xkcdRng = aleaFromFunc(() => 4/6); // https://xkcd.com/221/
 
+// from third-party PRNGs
+import { MersenneTwister } from "acme-math";
+const mt = new MersenneTwister(mySeed);
+const mtAlea = aleaFromFunc(() => mt.random());
+
 // from random byte providers:
 const secureRng = aleaFromByteSource(
     buf => hardwareRng.fillRandomBytes(buf)
 );
 
-// preset sequence for debugging
+// preset sequence for debugging/testing
 const presetRng = aleaFromSequence([.1, .4, .8], "loop");
 ```
 
@@ -118,5 +123,5 @@ const rightSkewed = alea.transform(x => Math.sqrt(x))
 
 ## Technicalities
 
-* String seeds are hashed with [DJB2-based accumulation with MurmurHash3](src/internal/util.ts) bit diffusion.
-* `bytes()` queries the RNG provider one per 4 bytes; transform curves are applied at the 32-bit level.
+* String seeds are hashed with [DJB2-based accumulation with MurmurHash3](https://github.com/tiadrop/alea/blob/master/src/internal/util.ts) bit diffusion.
+* `bytes()` queries the RNG provider once per 4 bytes; transform curves are applied at the 32-bit level.
