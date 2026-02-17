@@ -126,15 +126,36 @@ export class Alea {
 		table: Record<string, ArrayLike<string> | string | PhraseFunc>,
 		root: string
 	): string {
-		return root.replace(/\{([^}]+)\}/g, (_, key) => {
-			if (table[key] === undefined) return `{${key}}`;
-			if (typeof table[key] == "function") {
-				return table[key]((template) => this.phrase(table, template));
-			}
-			const source = table[key];
-			if (typeof source == "string") return this.phrase(table, source);
-			return this.phrase(table, this.sample(source));
-		});
+		const memo = new Map<string, string>();
+
+		const parse = (
+			root: string,
+		): string => {
+			return root.replace(/\{([^}]+)\}/g, (_, key: string) => {
+				if (table[key] === undefined) {
+					if (key.includes("=")) {
+						// "{g=greeting}" persists as 'g' - "Alice bought {numBananas=int} bananas. She ate all {numBananas=int} bananas."
+						// "{=greeting}" persists as 'greeting' - "Alice felt {=adjective}. She enjoyed feeling {=adjective}."
+						// persistence is per phrase() call, not per parse() call
+						const [memoKey, subkey] = key.split("=", 2);
+						if (!memo.has(memoKey || subkey)) {
+							if (!(subkey in table)) return `{${key}}`;
+							memo.set(memoKey || subkey, parse(`{${subkey}}`));
+						}
+						return memo.get(memoKey || subkey)!;
+					}
+					return `{${key}}`
+				}
+				if (typeof table[key] == "function") {
+					return table[key](parse);
+				}
+				const source = table[key];
+				if (typeof source == "string") return parse(source);
+				return parse(this.sample(source));
+			});
+		}
+
+		return parse(root);
 	}
 
 	/**
