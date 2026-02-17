@@ -5,8 +5,8 @@ import { Alea } from "./alea.js";
  * Create an Alea instance that draws from a byte generator, such as `crypto`
  * @example
  * ```ts
- * const cryptoAlea = aleaFromByteSource(crypto.getRandomValues);
- * const hwAlea = aleaFromByteSource(hardwareRng.fillBytes);
+ * const cryptoAlea = aleaFromByteSource(buf => crypto.getRandomValues(buf));
+ * const hwAlea = aleaFromByteSource(buf => hardwareRng.fillBytes(buf));
  * ```
  * @param applyBytes A callback that fills a Uint8Array with random bytes
  * @returns A byte generator-sourced Alea instance
@@ -54,7 +54,7 @@ type ExhaustionHandler = 'throw' | 'loop' | number | ((index: number) => number)
 };
 
 /**
- * Create an Alea instance that draws sequentially from a fixed list of values
+ * Create an Alea instance that draws sequentially from a list of values
  * @param sequence List of values >= 0 and < 1
  * @param onExhaust Defines behaviour when the sequence is exhausted
  * @returns Sequence-sourced Alea instance
