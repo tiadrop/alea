@@ -135,7 +135,7 @@ export class Alea {
 				if (table[key] === undefined) {
 					if (key.includes("=")) {
 						// "{g=greeting}" persists as 'g' - "Alice bought {numBananas=int} bananas. She ate all {numBananas=int} bananas."
-						// "{=greeting}" persists as 'greeting' - "Alice felt {=adjective}. She enjoyed feeling {=adjective}."
+						// "{=greeting}" persists as 'greeting' - "'My name is {=name}', said {=name}."
 						// persistence is per phrase() call, not per parse() call
 						const [memoKey, subkey] = key.split("=", 2);
 						if (!memo.has(memoKey || subkey)) {
@@ -278,9 +278,6 @@ export class Alea {
 
 	/**
 	 * Generate a random UUID (version 4)
-	 *
-	 * **Security note**: output is only as cryptographically secure as
-	 * an instance's PRNG source, which, by default, is not.
 	 * @see {@link cryptoAlea}
 	 * @returns Random UUID string
 	 */
@@ -305,7 +302,8 @@ export class Alea {
 	}
 
 	/**
-	 * Create an Alea instance using with a transformed probability density
+	 * Create an Alea instance using transformed values sourced from a
+	 * parent instance
 	 * @param fn A function that takes and returns values >= 0 and < 1
 	 * @returns Alea instance following the transformed distribution
 	 */
