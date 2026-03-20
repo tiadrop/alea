@@ -8,17 +8,19 @@ import { Alea } from "./alea.js";
  * const cryptoAlea = aleaFromByteSource(buf => crypto.getRandomValues(buf));
  * const hwAlea = aleaFromByteSource(buf => hardwareRng.fillBytes(buf));
  * ```
- * @param applyBytes A callback that fills a Uint8Array with random bytes
+ * @param applyBytes A callback that fills a Uint8Array(4) with random bytes
  * @returns A byte generator-sourced Alea instance
  */
 export function aleaFromByteSource(
-	applyBytes: (buffer: Uint8Array) => void
+    applyBytes: (buffer: Uint8Array) => void
 ) {
-	return new Alea(() => {
-        const buffer = new ArrayBuffer(4);
-		const view = new DataView(buffer);
-		applyBytes(new Uint8Array(buffer));
-		return view.getUint32(0) / 4294967296;
+	const u8a = new Uint8Array(4);
+	const view = new DataView(u8a.buffer);
+    return new Alea(() => {
+        applyBytes(u8a);
+        const result = view.getUint32(0) / 4294967296;
+        view.setUint32(0, 0);
+        return result;
     });
 }
 
@@ -39,8 +41,8 @@ export function aleaFromSeed(seed: number | string) {
  * Create an Alea instance that draws from a custom function
  * @example
  * ```ts
- * const basicAlea = aleaFromFunc(Math.random);
- * const lcgAlea = aleaFromFunc(customRng.next);
+ * const alea = aleaFromFunc(Math.random);
+ * const customAlea = aleaFromFunc(customRng.next);
  * ```
  * @param fn Source RNG; a function that returns a value >= 0 and < 1
  * @returns Custom function-sourced Alea instance
