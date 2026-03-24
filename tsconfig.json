@@ -5,7 +5,9 @@
     "target": "es2019",
     "declaration": true,
     "strict": true,
-    "outDir": "./dist"
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "types": ["node"]
   },
-  "files": ["src/entry/node.ts", "src/entry/browser.ts", "src/entry/other.ts", "src/entry/prng/index.ts"]
+  "include": ["src"]
 }

@@ -12,7 +12,7 @@ import { Alea } from "./alea.js";
  * @returns A byte generator-sourced Alea instance
  */
 export function aleaFromByteSource(
-    applyBytes: (buffer: Uint8Array) => void
+    applyBytes: (buffer: Uint8Array<ArrayBuffer>) => void
 ) {
 	const u8a = new Uint8Array(4);
 	const view = new DataView(u8a.buffer);

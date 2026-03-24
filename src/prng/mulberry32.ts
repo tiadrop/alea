@@ -1,5 +1,5 @@
 import { Alea } from "../alea.js";
-import { hashSeed } from "../util.js";
+import { hashSeed } from "../hash.js";
 
 /**
  * Create an Alea instance that draws from a Mulberry32 PRNG

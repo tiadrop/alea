@@ -1,5 +1,5 @@
 import { Alea } from "../alea.js";
-import { hashSeed } from "../util.js";
+import { hashSeed } from "../hash.js";
 
 function rotl(x: number, k: number): number {
 	return (x << k) | (x >>> (32 - k));

@@ -1,4 +1,4 @@
-import type { cryptoAlea } from "../entry/other.js";
+import type { cryptoAlea } from "./entry/other.js";
 
 type RandomFunction = () => number;
 

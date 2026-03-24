@@ -1,23 +1,47 @@
 {
   "name": "@xtia/alea",
-  "version": "1.1.0",
-  "description": "RNG utilities",
-  "main": "index.js",
-  "directories": {
-    "lib": "src"
+  "version": "1.1.1",
+  "description": "A practical randomness toolkit. Sample/shuffle arrays, generate strings, create UUIDs, and more, with a unified API for Math.random(), crypto, or custom/transformed PRNGs.",
+  "repository": {
+    "url": "https://github.com/tiadrop/alea",
+    "type": "github"
   },
+  "exports": {
+    ".": {
+      "types": "./lib/entry/other.d.ts",
+      "browser": "./lib/entry/browser.js",
+      "workerd": "./lib/entry/browser.js",
+      "deno": "./lib/entry/browser.js",
+      "node": "./lib/entry/node.js",
+      "bun": "./lib/entry/node.js",
+      "default": "./lib/entry/other.js"
+    },
+    "./prng": {
+      "types": "./lib/entry/prng/index.d.ts",
+      "default": "./lib/entry/prng/index.js"
+    },
+    "./types": {
+      "types": "./lib/entry/types/index.d.ts"
+    },
+    "./lib/*": null
+  },
+  "files": [
+    "./lib"
+  ],
   "scripts": {
-    "build": "npx tsc",
-    "test": "jest"
+    "build": "tsc",
+    "prepublishOnly": "tsc"
   },
   "author": "Aleta Lovelace",
   "keywords": [
-    "animation",
-    "timeline"
+    "random",
+    "rng",
+    "crypto",
+    "prng"
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^25.0.3",
-    "typescript": "^5.9.3"
+    "@types/node": "^25.5.0",
+    "typescript": "^6.0.2"
   }
 }

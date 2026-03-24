@@ -1,13 +1,13 @@
-import { Alea } from "../internal/alea.js";
+import { Alea } from "../alea.js";
 export type { Alea };
 export {
 	aleaFromByteSource,
 	aleaFromSeed,
 	aleaFromFunc,
 	aleaFromSequence,
-} from "../internal/factories.js";
+} from "../factories.js";
 
-export { charsets } from "../internal/charsets.js";
+export { charsets } from "../charsets.js";
 
 /**
  * An Alea instance that uses Math.random() as a source
