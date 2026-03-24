@@ -123,5 +123,5 @@ const rightSkewed = alea.transform(x => Math.sqrt(x))
 
 ## Technicalities
 
-* String seeds are hashed with [DJB2-based accumulation with MurmurHash3](https://github.com/tiadrop/alea/blob/master/src/internal/hash.ts) bit diffusion.
+* String seeds are hashed with [DJB2-based accumulation with MurmurHash3](https://github.com/tiadrop/alea/blob/master/src/hash.ts) bit diffusion.
 * `bytes()` queries the RNG provider once per 4 bytes; transform curves are applied at the 32-bit level.
