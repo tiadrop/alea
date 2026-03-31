@@ -12,8 +12,24 @@ import { Alea } from "./alea.js";
  * @returns A byte generator-sourced Alea instance
  */
 export function aleaFromByteSource(
-    applyBytes: (buffer: Uint8Array<ArrayBuffer>) => void
-) {
+    applyBytes: (buffer: Uint8Array) => void,
+): Alea
+/**
+ * Create an Alea instance that draws from a byte generator, such as `crypto`
+ * @param applyBytes A callback that fills a Uint8Array with random bytes
+ * @param bytesPerCall Size of the Uint8Array that will be passed to `applyBytes` (default: 4)
+ * **Security note**: except where `bytesPerCall` is 4, bytes are buffered internally.
+ * @returns A byte generator-sourced Alea instance
+ */
+export function aleaFromByteSource(
+    applyBytes: (buffer: Uint8Array) => void,
+    bytesPerCall: number,
+): Alea
+export function aleaFromByteSource(
+    applyBytes: (buffer: Uint8Array) => void,
+    bytesPerCall: number = 4,
+): Alea {
+    if (bytesPerCall !== 4) return aleaFromBufferedByteSource(applyBytes, bytesPerCall);
 	const u8a = new Uint8Array(4);
 	const view = new DataView(u8a.buffer);
     return new Alea(() => {
@@ -21,6 +37,30 @@ export function aleaFromByteSource(
         const result = view.getUint32(0) / 4294967296;
         view.setUint32(0, 0);
         return result;
+    });
+}
+
+function aleaFromBufferedByteSource(
+    applyBytes: (buffer: Uint8Array) => void,
+    size: number = 4,
+) {
+    if (size <= 0 || !Number.isInteger(size)) {
+        throw new Error('size must be a positive and finite integer');
+    }
+    
+    let buffer = new Uint8Array();
+    const temp = new Uint8Array(size);
+    
+    return aleaFromByteSource(b => {
+        while (buffer.length < 4) {
+            const previous = buffer;
+            applyBytes(temp);
+            buffer = new Uint8Array(buffer.length + size);
+            buffer.set(previous);
+            buffer.set(temp, previous.length);
+        }
+        b.set(buffer.slice(0, 4));
+        buffer = buffer.slice(4);
     });
 }
 
