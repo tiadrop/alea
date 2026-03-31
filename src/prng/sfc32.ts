@@ -9,9 +9,33 @@ import { hashSeed } from "../hash.js";
  * @param b Seed B
  * @param c Seed C
  * @param d Seed D
+ * @param exposeState If true, returns an object of `{ alea: Alea, saveState(): [number, number, number, number] }`
  * @returns Alea instance using SFC32
  */
-export function sfc32(a: number | string, b: number | string, c: number | string, d: number | string) {
+export function sfc32(
+    a: number | string,
+    b: number | string,
+    c: number | string,
+    d: number | string,
+    exposeState?: false
+): Alea
+export function sfc32(
+    a: number | string,
+    b: number | string,
+    c: number | string,
+    d: number | string,
+    exposeState: true
+): {
+    alea: Alea;
+    saveState(): readonly [number, number, number, number];
+}
+export function sfc32(
+    a: number | string,
+    b: number | string,
+    c: number | string,
+    d: number | string,
+    exposeState: boolean = false
+) {
     const toWord = (v: number | string) =>
         typeof v === "number" ? (v >>> 0) : hashSeed(String(v));
 
@@ -20,7 +44,7 @@ export function sfc32(a: number | string, b: number | string, c: number | string
     let s2 = toWord(c) | 0;
     let s3 = toWord(d) | 0;
 
-    return new Alea(() => {
+    const alea = new Alea(() => {
         s0 |= 0; s1 |= 0; s2 |= 0; s3 |= 0;
         const t = (s0 + s1 | 0) + s3 | 0;
         s3 = s3 + 1 | 0;
@@ -29,4 +53,13 @@ export function sfc32(a: number | string, b: number | string, c: number | string
         s2 = (s2 << 21 | s2 >>> 11) + t | 0;
         return (t >>> 0) / 4294967296;
     });
+
+    if (exposeState) return {
+        alea,
+        saveState() {
+            return [s0, s1, s2, s3] as const;
+        }
+    }
+
+    return alea;
 }

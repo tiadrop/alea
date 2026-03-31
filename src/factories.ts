@@ -70,11 +70,14 @@ function aleaFromBufferedByteSource(
  * - Fast, with decent statistical quality
  * 
  * For applications requiring higher statistical quality or different characteristics, see the specialised PRNGs in @xtia/alea/prng
- * @param seed 
- * @returns Alea instance using Mulberry32
  */
-export function aleaFromSeed(seed: number | string) {
-	return mulberry32(seed);
+export function aleaFromSeed(seed: number | string, exposeState?: false): Alea
+export function aleaFromSeed(seed: number | string, exposeState: true): {
+    alea: Alea;
+    saveState(): number;
+}
+export function aleaFromSeed(seed: number | string, exposeState: boolean = false) {
+    return exposeState ? mulberry32(seed, true) : mulberry32(seed);
 }
 
 /**

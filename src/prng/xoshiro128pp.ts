@@ -13,14 +13,34 @@ function rotl(x: number, k: number): number {
  * @param b Seed B
  * @param c Seed C
  * @param d Seed D
+ * @param exposeState If true, returns an object of `{ alea: Alea, saveState(): [number, number, number, number] }`
  * @returns Alea instance using Xoshiro128++
  */
 export function xoshiro128pp(
 	a: number | string,
 	b: number | string,
 	c: number | string,
-	d: number | string
-) {
+	d: number | string,
+	exposeState?: false,
+): Alea
+export function xoshiro128pp(
+	a: number | string,
+	b: number | string,
+	c: number | string,
+	d: number | string,
+	exposeState: true,
+): {
+    alea: Alea;
+    saveState(): readonly [number, number, number, number];
+}
+export function xoshiro128pp(
+	a: number | string,
+	b: number | string,
+	c: number | string,
+	d: number | string,
+	exposeState: boolean = false,
+)
+ {
 	const toWord = (v: number | string) =>
 		(typeof v === "number" ? v >>> 0 : hashSeed(String(v))) | 0;
 
@@ -34,7 +54,7 @@ export function xoshiro128pp(
 		s0 = 1;
 	}
 
-	return new Alea(() => {
+	const alea = new Alea(() => {
 		s0 |= 0;
 		s1 |= 0;
 		s2 |= 0;
@@ -54,4 +74,15 @@ export function xoshiro128pp(
 
 		return result / 4294967296;
 	});
+
+	if (exposeState) {
+		return {
+			alea,
+			saveState() {
+            	return [s0, s1, s2, s3] as const;
+        	}
+		}
+	}
+
+	return alea;
 }
