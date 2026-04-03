@@ -50,6 +50,7 @@ import { cryptoAlea } from "@xtia/alea";
 
 // cryptoAlea draws from runtime's crypto
 
+const damage = cryptoAlea.between(10, 20);
 const id = cryptoAlea.uuid();
 const unpredictableDeck = cryptoAlea.shuffle(cards);
 ```

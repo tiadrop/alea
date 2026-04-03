@@ -16,9 +16,9 @@ export function aleaFromByteSource(
 ): Alea
 /**
  * Create an Alea instance that draws from a byte generator, such as `crypto`
- * @param applyBytes A callback that fills a Uint8Array with random bytes
+ * @param applyBytes A callback that fills a provided Uint8Array with random bytes
  * @param bytesPerCall Size of the Uint8Array that will be passed to `applyBytes` (default: 4)
- * **Security note**: except where `bytesPerCall` is 4, bytes are buffered internally.
+ * **Note**: except where `bytesPerCall` is 4, bytes are buffered internally.
  * @returns A byte generator-sourced Alea instance
  */
 export function aleaFromByteSource(
