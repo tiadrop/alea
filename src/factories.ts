@@ -12,7 +12,7 @@ import { Alea } from "./alea.js";
  * @returns A byte generator-sourced Alea instance
  */
 export function aleaFromByteSource(
-    applyBytes: (buffer: Uint8Array) => void,
+    applyBytes: (buffer: Uint8Array<any>) => void,
 ): Alea
 /**
  * Create an Alea instance that draws from a byte generator, such as `crypto`

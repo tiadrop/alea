@@ -1,11 +1,12 @@
 {
   "name": "@xtia/alea",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "A practical randomness toolkit. Sample/shuffle arrays, generate strings, create UUIDs, and more, with a unified API for Math.random(), crypto, or custom/transformed PRNGs.",
   "repository": {
     "url": "https://github.com/tiadrop/alea",
     "type": "github"
   },
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./lib/entry/other.d.ts",
