@@ -20,7 +20,8 @@ export function mulberry32(seed: number | string, exposeState?: false): Alea
  */
 export function mulberry32(seed: number | string, exposeState: true): {alea: Alea, saveState(): number}
 export function mulberry32(seed: number | string, exposeState: boolean = false) {
-	let nseed = typeof seed == "string" ? hashSeed(seed) : (seed >>> 0);
+	let nseed = hashSeed(seed);
+
 	const alea = new Alea(() => {
 		nseed |= 0;
 		nseed = nseed + 0x6D2B79F5 | 0;

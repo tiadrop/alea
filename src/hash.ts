@@ -1,4 +1,6 @@
-export function hashSeed(seed: string): number {
+export function hashSeed(seed: string | number): number {
+    if (typeof seed == "number") return seed >>> 0;
+    
     let hash = 0;
     
     for (let i = 0; i < seed.length; i++) {

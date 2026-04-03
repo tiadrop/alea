@@ -36,13 +36,10 @@ export function sfc32(
     d: number | string,
     exposeState: boolean = false
 ) {
-    const toWord = (v: number | string) =>
-        typeof v === "number" ? (v >>> 0) : hashSeed(String(v));
-
-    let s0 = toWord(a) | 0;
-    let s1 = toWord(b) | 0;
-    let s2 = toWord(c) | 0;
-    let s3 = toWord(d) | 0;
+    let s0 = hashSeed(a) | 0;
+    let s1 = hashSeed(b) | 0;
+    let s2 = hashSeed(c) | 0;
+    let s3 = hashSeed(d) | 0;
 
     const alea = new Alea(() => {
         s0 |= 0; s1 |= 0; s2 |= 0; s3 |= 0;

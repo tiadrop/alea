@@ -41,13 +41,11 @@ export function xoshiro128pp(
 	exposeState: boolean = false,
 )
  {
-	const toWord = (v: number | string) =>
-		(typeof v === "number" ? v >>> 0 : hashSeed(String(v))) | 0;
 
-	let s0 = toWord(a);
-	let s1 = toWord(b);
-	let s2 = toWord(c);
-	let s3 = toWord(d);
+	let s0 = hashSeed(a);
+	let s1 = hashSeed(b);
+	let s2 = hashSeed(c);
+	let s3 = hashSeed(d);
 
 	// requires at least one non-zero value
 	if (s0 === 0 && s1 === 0 && s2 === 0 && s3 === 0) {
