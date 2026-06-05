@@ -1,5 +1,3 @@
-import type { cryptoAlea } from "./entry/other.js";
-
 type RandomFunction = () => number;
 
 type PhraseFunc = (parse: (template: string) => string) => string;
@@ -278,7 +276,7 @@ export class Alea {
 
 	/**
 	 * Generate a random UUID (version 4)
-	 * @see {@link cryptoAlea}
+	 * @see {@link ./entry/other.ts#cryptoAlea}
 	 * @returns Random UUID string
 	 */
 	uuid(): string {
