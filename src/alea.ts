@@ -1,6 +1,7 @@
-type RandomFunction = () => number;
+import { PhraseFunc, PhraseGen } from "./phrase.js";
+import { Sampler, WeightedSampler } from "./samplers.js";
 
-type PhraseFunc = (parse: (template: string) => string) => string;
+type RandomFunction = () => number;
 
 export class Alea {
 	/**
@@ -39,9 +40,7 @@ export class Alea {
 		}
 
 		if (count > items.length) {
-			throw new RangeError(
-				`Cannot sample ${count} items from array of length ${items.length}`
-			);
+			throw new RangeError(`Cannot sample ${count} unique items from only ${items.length} candidates`);
 		}
 
 		const result = Array.from({ length: count }, (_, index) => items[index]);
@@ -70,13 +69,21 @@ export class Alea {
 	 * @param items
 	 * @returns Shuffled copy of an array
 	 */
-	shuffle<T>(items: ArrayLike<T>): T[] {
-		const shuffled = Array.from(items);
-		for (let i = shuffled.length - 1; i > 0; i--) {
+	shuffle<T>(items: ArrayLike<T>): T[]
+	/**
+	 * Shuffle an array, in-place or as copy
+	 * @param items
+	 * @param inPlace If true, the array passed in will be shuffled
+	 * @returns The shuffled array
+	 */
+	shuffle<T>(items: T[], inPlace: boolean): T[]
+	shuffle<T>(items: ArrayLike<T>, inPlace: boolean = false): T[] {
+		const array = inPlace ? items as T[] : Array.from(items);
+		for (let i = array.length - 1; i > 0; i--) {
 			const j = Math.floor(this.next() * (i + 1));
-			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+			[array[i], array[j]] = [array[j], array[i]];
 		}
-		return shuffled;
+		return array;
 	}
 
 	/**
@@ -88,6 +95,22 @@ export class Alea {
 	between(min: number, max: number) {
 		const range = max - min;
 		return min + range * this.next();
+	}
+
+	/**
+	 * Get a random integer between 0 and max (**inclusive**)
+	 * @param max 
+	 */
+	int(max: number): number
+	/**
+	 * Get a random integer between min and max (**inclusive**)
+	 * @param max 
+	 */
+	int(min: number, max: number): number
+	int(m: number, _max?: number): number {
+		const min = _max === undefined ? 0 : m;
+		const max = _max ?? m;
+		return Math.floor(this.between(min, max + 1));
 	}
 
 	/**
@@ -124,69 +147,27 @@ export class Alea {
 		table: Record<string, ArrayLike<string> | string | PhraseFunc>,
 		root: string
 	): string {
-		const memo = new Map<string, string>();
-
-		const parse = (
-			root: string,
-		): string => {
-			return root.replace(/\{([^}]+)\}/g, (_, key: string) => {
-				if (table[key] === undefined) {
-					if (key.includes("=")) {
-						// "{g=greeting}" persists as 'g' - "Alice bought {numBananas=int} bananas. She ate all {numBananas=int} bananas."
-						// "{=greeting}" persists as 'greeting' - "'My name is {=name}', said {=name}."
-						// persistence is per phrase() call, not per parse() call
-						const [memoKey, subkey] = key.split("=", 2);
-						if (!memo.has(memoKey || subkey)) {
-							if (!(subkey in table)) return `{${key}}`;
-							memo.set(memoKey || subkey, parse(`{${subkey}}`));
-						}
-						return memo.get(memoKey || subkey)!;
-					}
-					return `{${key}}`
-				}
-				if (typeof table[key] == "function") {
-					return table[key](parse);
-				}
-				const source = table[key];
-				if (typeof source == "string") return parse(source);
-				return parse(this.sample(source));
-			});
-		}
-
-		return parse(root);
+		const gen = new PhraseGen(this, table);
+		return gen.generate(root);
 	}
 
 	/**
 	 * Create a factory to pick random items from a biased list
-	 * @param table Candidate table, as an array of `[value, weight]` tuples
+	 * @param table Candidate table, as an array of `[value, weight]` tuples or a `Map<value, weight>`
 	 * @returns Random item factory
+	 * @deprecated use `new WeightedSampler(myAlea, table)`
 	 */
-	createWeightedSampler<T>(table: [value: T, weight: number][]) {
-		const filtered = table.filter((v) => Number.isFinite(v[1]) && v[1] > 0);
-		if (filtered.length === 0) {
-			throw new Error("Weighted source has no viable candidates");
-		}
-
-		const cumulative: number[] = new Array(filtered.length);
-		let total = 0;
-		for (let i = 0; i < filtered.length; i++) {
-			total += filtered[i][1];
-			cumulative[i] = total;
-		}
-
-		return {
-			sample: (): T => {
-				const r = this.between(0, total);
-				let lo = 0;
-				let hi = cumulative.length - 1;
-				while (lo < hi) {
-					const mid = (lo + hi) >>> 1;
-					if (r < cumulative[mid]) hi = mid;
-					else lo = mid + 1;
-				}
-				return filtered[lo][0];
-			},
-		};
+	createWeightedSampler<T>(table: [value: T, weight: number][] | Map<T, number>): Sampler<T>
+	/**
+	 * Create a factory to pick random items from a biased list
+	 * @param items List of candidates
+	 * @param weightFn Function to determine the weight of an item
+	 * @returns Random item factory
+	 * @deprecated use `new WeightedSampler(myAlea, items, weightFn)`
+	 */
+	createWeightedSampler<T>(items: T[], weightFn: (item: T) => number): Sampler<T>
+	createWeightedSampler<T>(tableOrItems: Map<T, number> | [value: T, weight: number][] | T[], weightFn?: (value: T) => number): Sampler<T> {
+		return new WeightedSampler(this, tableOrItems as T[], weightFn as (value: T) => number);
 	}
 
 	/**
@@ -302,6 +283,10 @@ export class Alea {
 	/**
 	 * Create an Alea instance using transformed values sourced from a
 	 * parent instance
+	 * 
+	 * **Caution**: transforming to values outside of the expected range (>=0, < 1) can
+	 * cause erratic behaviour, and, due to the nature of randomness, adherence cannot
+	 * be verified automatically.
 	 * @param fn A function that takes and returns values >= 0 and < 1
 	 * @returns Alea instance following the transformed distribution
 	 */

@@ -1,4 +1,5 @@
 import { Alea } from "../alea.js";
+export { Sampler, WeightedSampler, UniformSampler } from "../samplers.js";
 export type { Alea };
 export {
 	aleaFromByteSource,
