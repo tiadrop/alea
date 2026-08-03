@@ -2,14 +2,14 @@
 
 ### Tame the Chaos
 
-Alea is a utility wrapper for turning random numbers into useful values. Give it any source of randomness, get a toolkit for dice, samples, strings, and more.
+Alea is a utility wrapper for turning random numbers into useful values. Give it any source of randomness, get a the same expressive API.
 
 * Expressive: code with intent
 * Crypto-safe and seeded algorithms out-of-the-box
 * Array shuffling, weighted sampling, recursive template phrase generation, UUID, bytes and more
 * Fully typed
 * No dependencies
-* ~2.5kb minified core
+* ~1.2kb gzipped core
 
 ## Basics
 
@@ -24,12 +24,6 @@ import { alea } from "@xtia/alea";
 const damage = alea.between(10, 20);
 const crit = alea.chance(0.1);
 const loot = alea.sample(['sword', 'potion', 'gold']);
-const enemySpawner = alea.createWeightedSampler([
-    ["goblin", 10],
-    ["orc", 5],
-    ["dragon", 0.1] // rare but possible!
-]);
-const enemy = enemySpawner.sample();
 
 // data generation
 const userId = alea.string(8, 'abcdef0123456789');
@@ -103,6 +97,35 @@ const strong = xoshiro128pp(5, 6, 7, 8);
 
 const reproducibleId = varied.string(12, hexadecimal);
 ```
+
+## Weighted and uniform samplers
+
+`WeightedSampler` and `UniformSampler` facilitate advanced array/Map/Set sampling, providing methods to select a random item, or multiple unique items, from a list.
+
+```ts
+import { WeightedSampler } from "@xtia/alea";
+
+// from a [value, weight][] table
+const enemySpawner = new WeightedSampler(alea, [
+    ["goblin", 10],
+    ["orc", 5],
+    ["dragon", 0.1] // rare but possible!
+]);
+
+const enemy = enemySpawner.sample();
+
+// using a weight function
+const dropSampler = new WeightedSampler(
+    alea,
+    enemy.items,
+    item => item.value
+);
+
+// valuable items are more likely
+const droppedItem = dropSampler.sample();
+```
+
+`sampler.sample(n)` returns `n` *unique* items, while `sampler.extract(n?)` selects *and removes* random items from the pool.
 
 ## Advanced: Probability Density Transforms
 

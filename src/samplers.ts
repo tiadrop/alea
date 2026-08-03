@@ -125,7 +125,7 @@ export class WeightedSampler<T> implements Sampler<T> {
 			const values = this.table.map(i => i[0]);
 			this.table.splice(0, this.table.length);
 			this.totalWeight = 0;
-			return this.alea.shuffle(values);
+			return this.alea.shuffle(values, true);
 		}
 
 		return Array.from({length: count}, () => this.extract());
@@ -165,18 +165,12 @@ export class UniformSampler<T> implements Sampler<T> {
 			}
 			const idx = this.alea.int(this.items.length - 1);
 			return this.items.splice(idx, 1)[0];
-		};
+		}
 		if (count <= 0 || !Number.isInteger(count)) {
 			throw new Error(`Count must be a positive integer, got ${count}`);
 		}
 		if (count > this.items.length) {
 			throw new Error(`Cannot extract ${count} unique items from only ${this.items.length} candidates`);
-		}
-
-		if (count === this.items.length) {
-			const values = this.alea.shuffle(this.items);
-			this.items.splice(0, this.items.length);
-			return values;
 		}
 
 		for (let i = 0; i < count; i++) {

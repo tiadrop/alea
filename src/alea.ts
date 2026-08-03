@@ -1,5 +1,4 @@
 import { PhraseFunc, PhraseGen } from "./phrase.js";
-import { Sampler, WeightedSampler } from "./samplers.js";
 
 type RandomFunction = () => number;
 
@@ -149,25 +148,6 @@ export class Alea {
 	): string {
 		const gen = new PhraseGen(this, table);
 		return gen.generate(root);
-	}
-
-	/**
-	 * Create a factory to pick random items from a biased list
-	 * @param table Candidate table, as an array of `[value, weight]` tuples or a `Map<value, weight>`
-	 * @returns Random item factory
-	 * @deprecated use `new WeightedSampler(myAlea, table)`
-	 */
-	createWeightedSampler<T>(table: [value: T, weight: number][] | Map<T, number>): Sampler<T>
-	/**
-	 * Create a factory to pick random items from a biased list
-	 * @param items List of candidates
-	 * @param weightFn Function to determine the weight of an item
-	 * @returns Random item factory
-	 * @deprecated use `new WeightedSampler(myAlea, items, weightFn)`
-	 */
-	createWeightedSampler<T>(items: T[], weightFn: (item: T) => number): Sampler<T>
-	createWeightedSampler<T>(tableOrItems: Map<T, number> | [value: T, weight: number][] | T[], weightFn?: (value: T) => number): Sampler<T> {
-		return new WeightedSampler(this, tableOrItems as T[], weightFn as (value: T) => number);
 	}
 
 	/**
