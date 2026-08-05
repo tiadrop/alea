@@ -27,12 +27,12 @@ export class WeightedSampler<T> implements Sampler<T> {
 	private totalWeight: number;
 
 	private getRandomIndex() {
-		const pos = this.alea.next() * this.totalWeight;
+		const pos = this.alea.next() * this.totalWeight;   
 		let lower = 0;
 		let upper = this.weightMap.length - 1;
 		while (lower < upper) {
 			const mid = (lower + upper) >>> 1;
-			if (pos < this.weightMap[mid]) upper = mid;
+			if (pos <= this.weightMap[mid]) upper = mid;
 			else lower = mid + 1;
 		}
 		return lower;
@@ -107,6 +107,7 @@ export class WeightedSampler<T> implements Sampler<T> {
 			const [result, weight] = this.table[index];
 			this.totalWeight -= weight;
 			// update weight map
+			this.weightMap.splice(index, 1);
 			for (let i = index; i < this.weightMap.length; i++) {
 				this.weightMap[i] -= weight;
 			}
